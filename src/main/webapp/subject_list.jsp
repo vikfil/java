@@ -25,27 +25,27 @@
                 <input type="hidden" id="idSubject" name="idSubject">
                 <input type="hidden" id="action" name="action">
                 <c:choose>
-                    <c:when test="${not empty subjectList}">
+                    <c:when test="${not empty subjectDtoList}">
                         <table class="table table-striped">
                             <thead>
                             <tr>
                                 <td>SubjectName</td>
                             </tr>
                             </thead>
-                            <c:forEach var="subject" items="${subjectList}">
+                            <c:forEach var="subjectDto" items="${subjectDtoList}">
                                 <c:set var="classSuccess" value=""/>
-                                <c:if test="${idSubject == subject.id}">
+                                <c:if test="${idSubject == subjectDto.id}">
                                     <c:set var="classSuccess" value="info"/>
                                 </c:if>
                                 <tr class="${classSuccess}">
-                                    <td>${subject.subjectName}</td>
+                                    <td>${subjectDto.subjectName}</td>
                                     <td>
-                                        <a href='<c:url value="/subject?idSubject=${subject.id}&searchAction=searchById"/>' data-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
+                                        <a href='<c:url value="/subject?idSubject=${subjectDto.id}&searchAction=searchById"/>' data-toggle="tooltip" title="Edit"><i class="fas fa-edit"></i></a>
                                     </td>
                                     <td>
                                         <button type="submit" class="btn btn-danger  btn-md" data-toggle="tooltip" title="Remove"
                                                 onclick="document.getElementById('action').value='remove';
-                                                        document.getElementById('idSubject').value ='${subject.id}';
+                                                        document.getElementById('idSubject').value ='${subjectDto.id}';
                                                         document.getElementById('subjectForm').submit();">
                                                 <i class="fas fa-trash-alt"></i>
                                         </button>

@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
-    <title>Add subject</title>
+    <title>Schedule for group</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="../css/bootstrap.min.css">
@@ -12,23 +12,32 @@
 </head>
 <body>
 <div class="container">
-    <form action="subject" method="post"  role="form" data-toggle="validator" >
-        <c:if test ="${empty action}">
-            <c:set var="action" value="add"/>
-        </c:if>
-        <input type="hidden" id="action" name="action" value="${action}">
-        <input type="hidden" id="idSubject" name="idSubject" value="${subjectDto.id}">
-        <h2>Subject</h2>
-        <div class="form-group col-xs-4">
-            <label for="name" class="control-label col-xs-4">Name:</label>
-            <input type="text" name="name" id="name" class="form-control" value="${subjectDto.subjectName}" required="true"/>
-            <br></br>
-            <button type="submit" class="btn btn-primary  btn-md">Accept</button>
+    <div class="row">
+        <div class="col">
+            <h2>Schedule for group: ${groupDto}</h2>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <td>Weekday</td>
+                                <td>Lesson number</td>
+                                <td>Subject</td>
+                                <td>Lector</td>
+                                <td>Classroom</td>
+                            </tr>
+                            </thead>
+                            <c:forEach var="lessonDto" items="${lessonDtoList}">
+                                <tr>
+                                    <td>${lessonDto.weekday}</td>
+                                    <td>${lessonDto.numberLesson}</td>
+                                    <td>${lessonDto.subjectDto}</td>
+                                    <td>${lessonDto.lectorDto}</td>
+                                    <td>${lessonDto.classroomDto}</td>
+                                </tr>
+                            </c:forEach>
+                        </table>
         </div>
-    </form>
+    </div>
 </div>
-
-
 
 
 

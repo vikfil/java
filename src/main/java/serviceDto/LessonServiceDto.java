@@ -1,5 +1,7 @@
 package serviceDto;
 
+import mapper.GroupMapper;
+import mapper.LectorMapper;
 import mapper.LessonMapper;
 import model.*;
 import modelDto.*;
@@ -26,5 +28,15 @@ public class LessonServiceDto {
         return ScheduleDataAccess.deleteLessonById(id);
 
    }
+
+    public static List<LessonDto> lessonsForGroup(GroupDto groupDto) throws SQLException, ClassNotFoundException {
+        List<Lesson> list = ScheduleDataAccess.getScheduleForGroup(GroupMapper.groupDtoToGroup(groupDto));
+        return LessonMapper.listLessonToListDto(list);
+    }
+
+    public static List<LessonDto> lessonsForLector(LectorDto lectorDto) throws SQLException, ClassNotFoundException {
+        List<Lesson> list = ScheduleDataAccess.getScheduleForLector(LectorMapper.lectorDtoToLector(lectorDto));
+        return LessonMapper.listLessonToListDto(list);
+    }
 
 }

@@ -21,7 +21,7 @@
         <h2>Lesson</h2>
         <div class="form-group col-xs-4">
             <label for="weekday" class="control-label col-xs-4">Weekday:</label>
-            <select name="weekday" id="weekday">
+            <select name="weekday" class="form-control" id="weekday">
                 <option value="monday">Monday</option>
                 <option value="tuesday">Tuesday</option>
                 <option value="wednesday">Wednesday</option>
@@ -31,7 +31,7 @@
                 <option value="sunday">Sunday</option>
             </select>
             <label for="lessonNumber" class="control-label col-xs-4">Lesson number:</label>
-            <select name="lessonNumber" id="lessonNumber">
+            <select name="lessonNumber" id="lessonNumber" class="form-control">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -41,25 +41,25 @@
                 <option value="7">7</option>
             </select>
             <label for="lessonSubject" class="control-label col-xs-4">Subject:</label>
-            <select required name="subjectId" id="lessonSubject">
+            <select required name="subjectId" id="lessonSubject" class="form-control">
                 <c:forEach items="${subjectDtoList}" var="subjectDto">
                     <option value="${subjectDto.id}">${subjectDto}</option>
                 </c:forEach>
             </select>
             <label for="lessonGroup" class="control-label col-xs-4">Group:</label>
-            <select required name="groupId" id="lessonGroup">
+            <select required name="groupId" id="lessonGroup" class="form-control">
                 <c:forEach items="${groupDtoList}" var="groupDto">
                     <option value="${groupDto.id}">${groupDto}</option>
                 </c:forEach>
             </select>
             <label for="lessonLector" class="control-label col-xs-4">Lector:</label>
-            <select required name="lectorId" id="lessonLector">
+            <select required name="lectorId" id="lessonLector" class="form-control">
                 <c:forEach items="${lectorDtoList}" var="lectorDto">
                     <option value="${lectorDto.id}">${lectorDto}</option>
                 </c:forEach>
             </select>
             <label for="lessonClassroom" class="control-label col-xs-4">Classroom:</label>
-            <select required name="classroomId" id="lessonClassroom">
+            <select required name="classroomId" id="lessonClassroom" class="form-control">
                 <c:forEach items="${classroomDtoList}" var="classroomDto">
                     <option value="${classroomDto.id}">${classroomDto}</option>
                 </c:forEach>

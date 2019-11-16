@@ -81,7 +81,7 @@ public class ScheduleDataAccess {
         return list;
     }
 
-    public List<Lesson> getScheduleForGroup(Group group) throws SQLException, ClassNotFoundException {
+    public static List<Lesson> getScheduleForGroup(Group group) throws SQLException, ClassNotFoundException {
         try (Connection connection = JDBCSingleton.getConnection();
              PreparedStatement prep = connection.prepareStatement(SELECT_LESSON_FOR_GROUP)) {
              prep.setLong(1, group.getId());
@@ -93,6 +93,7 @@ public class ScheduleDataAccess {
             List<Lesson> lessonForGroup = new ArrayList<>();
              while (cached.next()) {
                  Lesson lesson = new Lesson();
+                 lesson.setId(cached.getLong("lesson_id"));
                  lesson.setWeekday(Week.valueOf(cached.getString("weekday").toUpperCase()));
                  lesson.setNumberLesson(cached.getInt("lesson_number"));
                  lesson.setSubject(SubjectRepository.subjectById(cached.getLong("subject_id")));
@@ -105,7 +106,7 @@ public class ScheduleDataAccess {
         }
     }
 
-    public List<Lesson> getScheduleForLector(Lector lector) throws SQLException, ClassNotFoundException {
+    public static List<Lesson> getScheduleForLector(Lector lector) throws SQLException, ClassNotFoundException {
         try (Connection connection = JDBCSingleton.getConnection();
              PreparedStatement prep = connection.prepareStatement(SELECT_LESSON_FOR_LECTOR)) {
             prep.setLong(1, lector.getId());
@@ -117,6 +118,7 @@ public class ScheduleDataAccess {
             List<Lesson> lessonForLector = new ArrayList<>();
             while (cached.next()) {
                 Lesson lesson = new Lesson();
+                lesson.setId(cached.getLong("lesson_id"));
                 lesson.setWeekday(Week.valueOf(cached.getString("weekday").toUpperCase()));
                 lesson.setNumberLesson(cached.getInt("lesson_number"));
                 lesson.setSubject(SubjectRepository.subjectById(cached.getLong("subject_id")));

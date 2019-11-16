@@ -15,6 +15,7 @@
     <div class="row">
         <div class="col">
             <h2>Classroom</h2>
+            <button onclick="location.href='<c:url value="/schedule.jsp"/>'" type="button" class="btn btn-primary  btn-lg " style="width: 100px;"><i class="fa fa-home"></i></button>
             <!-- Classroom List -->
             <c:if test="${not empty message}">
                 <div class="alert alert-success">

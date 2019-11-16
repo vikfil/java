@@ -1,17 +1,11 @@
 package repository;
 
 import datasource.JDBCSingleton;
-//import model.Group;
 import model.Subject;
 import org.apache.log4j.Logger;
-
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class SubjectRepository {
     private final static String INSERT_SUBJECT = "INSERT INTO schedule.subject(subject_name) VALUES(?)";

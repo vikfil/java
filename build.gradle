@@ -14,7 +14,6 @@ repositories {
 
 dependencies {
     compile group: 'org.postgresql', name: 'postgresql', version: '42.2.8'
-
     providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '4.0.1'
 
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.10.0'
@@ -34,10 +33,5 @@ dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
     compile group: 'org.modelmapper', name: 'modelmapper', version: '2.3.5'
-
-
-
-
-
 
 }

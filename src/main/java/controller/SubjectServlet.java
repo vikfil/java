@@ -1,10 +1,12 @@
 package controller;
 
 import model.Subject;
+import modelDto.SubjectDto;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.graalvm.compiler.nodes.calc.IntegerDivRemNode;
 import repository.SubjectRepository;
+import serviceDto.SubjectServiceDto;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -51,7 +53,7 @@ public class SubjectServlet extends HttpServlet {
                   break;
            }
         }else {
-        List<Subject> result = SubjectRepository.allSubjects();
+        List<SubjectDto> result = SubjectServiceDto.getSubjectsDto();
         forwardListSubjects(request, response, result);
         }
     }
@@ -61,8 +63,8 @@ public class SubjectServlet extends HttpServlet {
         logger.info("Inside method searchSubjectById");
         try {
             long idSubject = Long.valueOf(request.getParameter("idSubject"));
-            Subject subject = SubjectRepository.subjectById(idSubject);
-            request.setAttribute("subject", subject);
+            SubjectDto subjectDto = SubjectServiceDto.subjectDtoById(idSubject);
+            request.setAttribute("subjectDto", subjectDto);
             request.setAttribute("action", "edit");
             String nextJSP = "/subject.jsp";
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
@@ -74,11 +76,12 @@ public class SubjectServlet extends HttpServlet {
         }
     }
 
-    private void forwardListSubjects(HttpServletRequest request, HttpServletResponse response, List subjectList) throws ServletException, IOException {
+    private void forwardListSubjects(HttpServletRequest request, HttpServletResponse response, List subjectDtoList)
+                                     throws ServletException, IOException {
         logger.info("Inside method forwardListSubjects");
         String nextJSP = "/subject_list.jsp";
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(nextJSP);
-        request.setAttribute("subjectList", subjectList);
+        request.setAttribute("subjectDtoList", subjectDtoList);
         dispatcher.forward(request, response);
         }
 
@@ -87,14 +90,14 @@ public class SubjectServlet extends HttpServlet {
         logger.info("Inside method addSubjectAction");
         try {
             String name = request.getParameter("name");
-            Subject subject = new Subject();
-            subject.setSubjectName(name);
-            long idSubject = SubjectRepository.addSubject(subject);
-            List<Subject> subjectList = SubjectRepository.allSubjects();
+            SubjectDto subjectDto = new SubjectDto();
+            subjectDto.setSubjectName(name);
+            long idSubject = SubjectServiceDto.addSubjectDto(subjectDto);
+            List<SubjectDto> subjectDtoList = SubjectServiceDto.getSubjectsDto();
             request.setAttribute("idSubject", idSubject);
             String message = "The new subject has been successfully created";
             request.setAttribute("message", message);
-            forwardListSubjects(request, response, subjectList);
+            forwardListSubjects(request, response, subjectDtoList);
         }catch (Exception e) {
             request.setAttribute("Error", "Subject doesn't created");
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
@@ -108,15 +111,16 @@ public class SubjectServlet extends HttpServlet {
         try {
             String name = request.getParameter("name");
             long idSubject = Long.valueOf(request.getParameter("idSubject"));
-            Subject subject = new Subject(name);
-            subject.setId(idSubject);
-            boolean success = SubjectRepository.updateSubject(subject);
+            SubjectDto subjectDto = new SubjectDto();
+            subjectDto.setId(idSubject);
+            subjectDto.setSubjectName(name);
+            boolean success = SubjectServiceDto.updateSubjectDto(subjectDto);
             if (success) {
                 String message ="The subject has been successfully updated.";
-                List<Subject> subjectList = SubjectRepository.allSubjects();
+                List<SubjectDto> subjectDtoList = SubjectServiceDto.getSubjectsDto();
                 request.setAttribute("idSubject", idSubject);
                 request.setAttribute("message", message);
-                forwardListSubjects(request, response, subjectList);
+                forwardListSubjects(request, response, subjectDtoList);
             }
         }catch (Exception e) {
             request.setAttribute("Error", "Subject doesn't updated");
@@ -130,12 +134,12 @@ public class SubjectServlet extends HttpServlet {
         logger.info("Inside method removeSubjectById");
         try {
             long idSubject = Long.valueOf(req.getParameter("idSubject"));
-            boolean confirm = SubjectRepository.deleteSubjectById(idSubject);
+            boolean confirm = SubjectServiceDto.deleteSubjectDtoById(idSubject);
             if (confirm) {
                 String message = "The subject has been successfully removed.";
                 req.setAttribute("message", message);
-                List<Subject> subjectList = SubjectRepository.allSubjects();
-                forwardListSubjects(req, resp, subjectList);
+                List<SubjectDto> subjectDtoList = SubjectServiceDto.getSubjectsDto();
+                forwardListSubjects(req, resp, subjectDtoList);
             }
         }catch (Exception e){
             req.setAttribute("Error", "Subject doesn't removed");

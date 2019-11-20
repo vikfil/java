@@ -1,10 +1,10 @@
 package controller;
 
-import model.Lector;
 import modelDto.LectorDto;
+import modelDto.SubjectDto;
 import org.apache.log4j.Logger;
 import repository.LectorRepository;
-import serviceDto.LectorServiceDto;
+import service.LectorService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,13 +12,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet(name = "SaveLectorServlet",  urlPatterns = "/lector")
 public class LectorServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(LectorServlet.class.getName());
+    private LectorService lectorService = new LectorService(new LectorRepository());
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                          throws ServletException, IOException {
@@ -52,7 +58,7 @@ public class LectorServlet extends HttpServlet {
                     break;
             }
         }else {
-            List<LectorDto> result = LectorServiceDto.getLectorsDto();
+            List<LectorDto> result = lectorService.getLectorsDto();
             forwardListLectors(request, response, result);
         }
     }
@@ -62,7 +68,7 @@ public class LectorServlet extends HttpServlet {
         logger.info("Inside method searchLectorById");
         try {
             long idLector = Long.valueOf(request.getParameter("idLector"));
-            LectorDto lectorDto = LectorServiceDto.lectorDtoById(idLector);
+            LectorDto lectorDto = lectorService.lectorDtoById(idLector);
             request.setAttribute("lectorDto", lectorDto);
             request.setAttribute("actionLector", "edit");
             String nextJSP = "/lector.jsp";
@@ -87,23 +93,35 @@ public class LectorServlet extends HttpServlet {
     private void addLectorAction(HttpServletRequest request, HttpServletResponse response)
                                  throws ServletException, IOException {
         logger.info("Inside method addLectorAction");
-        try {
+
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
-            LectorDto lectorDto = new LectorDto();
-            lectorDto.setFirstName(firstName);
-            lectorDto.setLastName(lastName);
-            long idLector = LectorServiceDto.addLectorDto(lectorDto);
-            List<LectorDto> lectorDtoList = LectorServiceDto.getLectorsDto();
-            request.setAttribute("idLector", idLector);
-            String message = "The new Lector has been successfully created";
-            request.setAttribute("message", message);
-            forwardListLectors(request, response, lectorDtoList);
-        }catch (Exception e) {
-            request.setAttribute("Error", "Lector doesn't created");
-            getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
-            logger.error("Lector doesn't created", e);
-        }
+            LectorDto lectorDto = new LectorDto(firstName, lastName);
+            Set<ConstraintViolation<LectorDto>> violations = validator.validate(lectorDto);
+            if (violations.size() > 0) {
+                for (ConstraintViolation<LectorDto> violation : violations) {
+                    String message = violation.getMessage();
+                    request.setAttribute("message", message);
+                    getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
+                }
+            }else {
+//            lectorDto.setFirstName(firstName);
+//            lectorDto.setLastName(lastName);
+                try {
+                    long idLector = lectorService.addLectorDto(lectorDto);
+                    List<LectorDto> lectorDtoList = lectorService.getLectorsDto();
+                    request.setAttribute("idLector", idLector);
+                    String message = "The new Lector has been successfully created";
+                    request.setAttribute("message", message);
+                    forwardListLectors(request, response, lectorDtoList);
+                } catch (Exception e) {
+                    request.setAttribute("Error", "Lector doesn't created");
+                    getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
+                    logger.error("Lector doesn't created", e);
+                }
+            }
     }
 
     private void editLectorAction(HttpServletRequest request, HttpServletResponse response)
@@ -117,10 +135,10 @@ public class LectorServlet extends HttpServlet {
             lectorDto.setFirstName(firstName);
             lectorDto.setLastName(lastName);
             lectorDto.setId(idLector);
-            boolean success = LectorServiceDto.updateLectorDto(lectorDto);
+            boolean success = lectorService.updateLectorDto(lectorDto);
             if (success) {
                 String message ="The lector has been successfully updated.";
-                List<LectorDto> lectorDtoList = LectorServiceDto.getLectorsDto();
+                List<LectorDto> lectorDtoList = lectorService.getLectorsDto();
                 request.setAttribute("idLector", idLector);
                 request.setAttribute("message", message);
                 forwardListLectors(request, response, lectorDtoList);
@@ -137,11 +155,11 @@ public class LectorServlet extends HttpServlet {
         logger.info("Inside method removeLectorById");
         try {
             long idLector = Long.valueOf(req.getParameter("idLector"));
-            boolean confirm = LectorServiceDto.deleteLectorDtoById(idLector);
+            boolean confirm = lectorService.deleteLectorDtoById(idLector);
             if (confirm) {
                 String message = "The lector has been successfully removed.";
                 req.setAttribute("message", message);
-                List<LectorDto> lectorDtoList = LectorServiceDto.getLectorsDto();
+                List<LectorDto> lectorDtoList = lectorService.getLectorsDto();
                 forwardListLectors(req, resp, lectorDtoList);
             }
         }catch (Exception e){

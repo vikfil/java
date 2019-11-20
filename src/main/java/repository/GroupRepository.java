@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GroupRepository {
+public class GroupRepository implements GroupDao {
     private final static String INSERT_GROUP = "INSERT INTO schedule.group(group_number, group_name) VALUES(?,?)";
     private final static String SELECT_ALL = "SELECT * FROM schedule.group";
     private final static String DELETE = "DELETE FROM schedule.group WHERE group_id = ?";
@@ -16,8 +16,8 @@ public class GroupRepository {
     private final static String DROP_TABLE = "DROP TABLE schedule.group";
     private static Logger logger = Logger.getLogger(GroupRepository.class.getName());
 
-
-    public static long addGroup(Group group) throws SQLException, ClassNotFoundException {
+    @Override
+    public long addGroup(Group group) throws SQLException, ClassNotFoundException {
         logger.info("Inside method addGroup");
         try(Connection connection = JDBCSingleton.getInstance().getConnection()) {
             PreparedStatement prep = connection.prepareStatement(INSERT_GROUP, Statement.RETURN_GENERATED_KEYS);
@@ -30,7 +30,8 @@ public class GroupRepository {
         }
     }
 
-    public static List<Group> allGroups() {
+    @Override
+    public List<Group> allGroups() {
         logger.info("Inside method allGroups");
         List<Group> list = new ArrayList<>();
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
@@ -49,7 +50,8 @@ public class GroupRepository {
         return list;
     }
 
-    public static boolean updateGroup(Group group) throws SQLException, ClassNotFoundException {
+    @Override
+    public boolean updateGroup(Group group) throws SQLException, ClassNotFoundException {
         logger.info("Inside method updateGroup");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(UPDATE)) {
@@ -61,7 +63,7 @@ public class GroupRepository {
         }
     }
 
-    public static Group groupById(long id) throws SQLException, ClassNotFoundException {
+    public Group groupById(long id) throws SQLException, ClassNotFoundException {
         logger.info("Inside method groupById");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(GROUP_ID)) {
@@ -78,7 +80,7 @@ public class GroupRepository {
         throw new SQLException("Group id doesn't exist");
     }
 
-    public static boolean deleteGroupById(long id) throws SQLException, ClassNotFoundException {
+    public boolean deleteGroupById(long id) throws SQLException, ClassNotFoundException {
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(DELETE)) {
             prep.setLong(1, id);
@@ -87,5 +89,4 @@ public class GroupRepository {
 
         }
     }
-
 }

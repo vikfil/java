@@ -1,8 +1,15 @@
 package model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 public class Subject {
+    @Pattern(message = "Bad formed subject name",
+            regexp = "^[A-Z][a-z]*(\\s(([a-z]{1,3})|(([a-z]+\\')?[A-Z][a-z]*)))*$")
+    @NotNull
+    @Size(min = 5, max = 15)
     private String subjectName;
     private long id;
 

@@ -3,12 +3,11 @@ package repository;
 import datasource.JDBCSingleton;
 import model.Classroom;
 import org.apache.log4j.Logger;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClassroomRepository {
+public class ClassroomRepository implements ClassroomDao {
     private final static String INSERT_CLASSROOM = "INSERT INTO schedule.classroom(classroom_number, type_room) VALUES(?,?)";
     private final static String SELECT_ALL = "SELECT * FROM schedule.classroom";
     private final static String DELETE = "DELETE FROM schedule.classroom WHERE classroom_id = ?";
@@ -17,8 +16,8 @@ public class ClassroomRepository {
     private final static String DROP_TABLE = "DROP TABLE schedule.classroom";
     private static Logger logger = Logger.getLogger(ClassroomRepository.class.getName());
 
-
-    public static long addClassroom(Classroom classroom) throws SQLException, ClassNotFoundException {
+    @Override
+    public long addClassroom(Classroom classroom) throws SQLException, ClassNotFoundException {
         logger.info("Inside method addClassroom");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(INSERT_CLASSROOM, Statement.RETURN_GENERATED_KEYS)) {
@@ -31,7 +30,8 @@ public class ClassroomRepository {
         }
     }
 
-    public static List<Classroom> allClassrooms() {
+    @Override
+    public List<Classroom> allClassrooms() {
         logger.info("Inside method allClassroom");
         List<Classroom> list = new ArrayList<>();
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
@@ -50,7 +50,8 @@ public class ClassroomRepository {
         return list;
     }
 
-    public static Classroom classroomById(long id) throws SQLException, ClassNotFoundException {
+    @Override
+    public Classroom classroomById(long id) throws SQLException, ClassNotFoundException {
         logger.info("Inside method classroomById");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(CLASSROOM_ID)) {
@@ -67,7 +68,8 @@ public class ClassroomRepository {
         throw new SQLException("Classroom id doesn't exist");
     }
 
-    public static boolean updateClassroom(Classroom classroom) throws SQLException, ClassNotFoundException {
+    @Override
+    public boolean updateClassroom(Classroom classroom) throws SQLException, ClassNotFoundException {
         logger.info("Inside method updateClassroom");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(UPDATE)) {
@@ -79,7 +81,8 @@ public class ClassroomRepository {
         }
     }
 
-    public static boolean deleteClassroomById(long id) throws SQLException, ClassNotFoundException {
+    @Override
+    public boolean deleteClassroomById(long id) throws SQLException, ClassNotFoundException {
         logger.info("Inside method deleteClassroomById");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(DELETE)) {

@@ -5,27 +5,27 @@
     <title>Add group</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>">
+    <link rel="stylesheet" href="<c:url value='/css/main.css'/>">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
-    <form action="group" method="post"  role="form" data-toggle="validator" >
+    <form action="group" method="post"  role="form" class="form" data-toggle="validator" >
         <c:if test ="${empty actionGroup}">
             <c:set var="actionGroup" value="add"/>
         </c:if>
         <input type="hidden" id="actionAction" name="actionGroup" value="${actionGroup}">
         <input type="hidden" id="idGroup" name="idGroup" value="${groupDto.id}">
-        <h2>Group</h2>
+        <h2 class="h2">Group</h2>
         <div class="form-group col-xs-4">
             <label for="groupNumber" class="control-label col-xs-4">Group number:</label>
             <input type="text" name="groupNumber" id="groupNumber" class="form-control" value="${groupDto.groupNumber}" required="true"/>
             <label for="groupName" class="control-label col-xs-4">Group name:</label>
             <input type="text" name="groupName" id="groupName" class="form-control" value="${groupDto.groupName}"/>
             <br></br>
-            <button type="submit" class="btn btn-primary  btn-md">Accept</button>
+            <button type="submit" class="btn btn-success  btn-md">Create</button>
         </div>
     </form>
 </div>

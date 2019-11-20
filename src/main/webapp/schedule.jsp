@@ -5,8 +5,8 @@
     <title>Schedule</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/main.css" type="text/css">
+    <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>">
+    <link rel="stylesheet" href="<c:url value='/css/main.css'/>">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -31,8 +31,8 @@
        </div>
 </header>
 
-    <div class="row">
-        <div class="col-sm-6">
+    <div class="row schedule">
+        <div class="col-sm-6 ">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Show schedule for Group</h5>
@@ -50,7 +50,7 @@
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
-                                <form action="scheduleGroup" method="post">
+                                <form action="scheduleGroup" method="post" >
                                     <select class="form-control" required name="groupId" id="lessonGroup">
                                         <c:forEach items="${groupDtoList}" var="groupDto">
                                             <option value="${groupDto.id}">${groupDto}</option>
@@ -104,7 +104,6 @@
        <div class="row">
            <div class="col">
                <footer>
-                   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus commodi, quos, sequi sed ipsam iure nulla, ratione ipsa possimus quia natus. Voluptatum possimus harum magnam nulla nesciunt, voluptate reiciendis earum.</p>
                </footer>
            </div>
        </div>

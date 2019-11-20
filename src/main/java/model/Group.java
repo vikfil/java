@@ -1,13 +1,11 @@
 package model;
 
-import java.util.List;
 import java.util.Objects;
 
 public class Group {
     private String groupNumber;
     private String groupName;
     private long id;
-    //private List<String> students;
 
     public Group() {}
 

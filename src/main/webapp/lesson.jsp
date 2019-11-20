@@ -5,20 +5,20 @@
     <title>Add lesson</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>">
+    <link rel="stylesheet" href="<c:url value='/css/main.css'/>">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
-    <form action="addLesson" method="post"  role="form" data-toggle="validator" >
+    <form action="addLesson" method="post"  role="form" class="form" data-toggle="validator" >
 <%--        <c:if test ="${empty action}">--%>
 <%--            <c:set var="actionLesson" value="add"/>--%>
 <%--        </c:if>--%>
 <%--        <input type="hidden" id="actionLesson" name="actionLesson" value="${actionLesson}">--%>
 <%--        <input type="hidden" id="idLesson" name="idLesson" value="${lesson.id}">--%>
-        <h2>Lesson</h2>
+        <h2 class="h2">Lesson</h2>
         <div class="form-group col-xs-4">
             <label for="weekday" class="control-label col-xs-4">Weekday:</label>
             <select name="weekday" class="form-control" id="weekday">
@@ -65,7 +65,7 @@
                 </c:forEach>
             </select>
             <br></br>
-            <button type="submit" class="btn btn-primary  btn-md">Accept</button>
+            <button type="submit" class="btn btn-success  btn-md">Create</button>
         </div>
     </form>
 </div>

@@ -6,14 +6,14 @@ import model.Lesson;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ScheduleInMemory implements LessonRepository {
+public class ScheduleInMemory {
     private   List<Lesson> lessons;
 
     public ScheduleInMemory(List<Lesson> lessons) {
         this.lessons = lessons;
     }
 
-    @Override
+
     public boolean addLesson(Lesson lesson) {
         if (lesson == null) {
             return false;
@@ -34,12 +34,12 @@ public class ScheduleInMemory implements LessonRepository {
         return false;
     }
 
-    @Override
+
     public List<Lesson> getAllLessons() {
         return new ArrayList<>(lessons);
     }
 
-    @Override
+
     public List<Lesson> getScheduleForGroup(Group group) {
         if (group == null) {
             throw new IllegalArgumentException();
@@ -49,7 +49,7 @@ public class ScheduleInMemory implements LessonRepository {
                 .collect(Collectors.toList());
     }
 
-    @Override
+
     public List<Lesson> getScheduleForLector(Lector lector) {
         if (lector == null) {
             throw new IllegalArgumentException();

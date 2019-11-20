@@ -3,7 +3,8 @@ package controller;
 import model.*;
 import modelDto.*;
 import org.apache.log4j.Logger;
-import serviceDto.*;
+import repository.*;
+import service.*;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +17,14 @@ import java.util.List;
 @WebServlet(name = "AddLessonServlet", urlPatterns = "/addLesson")
 public class AddLessonServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(AddLessonServlet.class.getName());
+    private LessonService lessonService = new LessonService(new LessonRepository(new SubjectRepository(),
+                                                                                 new GroupRepository(),
+                                                                                 new LectorRepository(),
+                                                                                 new ClassroomRepository()));
+    private SubjectService subjectService = new SubjectService(new SubjectRepository());
+    private GroupService groupService = new GroupService(new GroupRepository());
+    private LectorService lectorService = new LectorService(new LectorRepository());
+    private ClassroomService classroomService = new ClassroomService(new ClassroomRepository());
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Inside method doPost");
@@ -33,16 +42,16 @@ public class AddLessonServlet extends HttpServlet {
             lessonDto.setLectorDto(new LectorDto(lectorId));
             long classroomId = Long.valueOf(request.getParameter("classroomId"));
             lessonDto.setClassroomDto(new ClassroomDto(classroomId));
-            boolean success = LessonServiceDto.addLessonDto(lessonDto);
+            boolean success = lessonService.addLessonDto(lessonDto);
             if (success) {
                 String message ="The lesson has been successfully created.";
-                List<LessonDto> lessonDtoList = LessonServiceDto.getLessonsDto();
+                List<LessonDto> lessonDtoList = lessonService.getLessonsDto();
                 request.setAttribute("message", message);
                 request.setAttribute("lessonDtoList", lessonDtoList);
                 forwardListLessons(request, response, lessonDtoList);
             }else {
                 String message ="The lesson doesn't created.";
-                List<LessonDto> lessonDtoList = LessonServiceDto.getLessonsDto();
+                List<LessonDto> lessonDtoList = lessonService.getLessonsDto();
                 request.setAttribute("message", message);
                 request.setAttribute("lessonDtoList", lessonDtoList);
                 forwardListLessons(request, response, lessonDtoList);
@@ -65,10 +74,10 @@ public class AddLessonServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("Inside method doGet");
-        List<SubjectDto> subjectDtoList = SubjectServiceDto.getSubjectsDto();
-        List<GroupDto> groupDtoList = GroupServiceDto.getGroupsDto();
-        List<LectorDto> lectorDtoList = LectorServiceDto.getLectorsDto();
-        List<ClassroomDto> classroomDtoList = ClassroomServiceDto.getClassroomsDto();
+        List<SubjectDto> subjectDtoList = subjectService.getSubjectsDto();
+        List<GroupDto> groupDtoList = groupService.getGroupsDto();
+        List<LectorDto> lectorDtoList = lectorService.getLectorsDto();
+        List<ClassroomDto> classroomDtoList = classroomService.getClassroomsDto();
 
         request.setAttribute("subjectDtoList", subjectDtoList);
         request.setAttribute("groupDtoList", groupDtoList);

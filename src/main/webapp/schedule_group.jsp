@@ -5,8 +5,8 @@
     <title>Schedule for group</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>">
+    <link rel="stylesheet" href="<c:url value='/css/main.css'/>">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -15,17 +15,57 @@
     <div class="row">
         <div class="col">
             <h2>Schedule for group: ${groupDto}</h2>
+            <button onclick="location.href='<c:url value="/schedule"/>'" type="button" class="btn btn-primary  btn-lg home" style="width: 100px;"><i class="fa fa-home"></i></button>
                         <table class="table table-striped">
                             <thead>
                             <tr>
-                                <td>Weekday</td>
-                                <td>Lesson number</td>
-                                <td>Subject</td>
-                                <td>Lector</td>
-                                <td>Classroom</td>
+                                <th>Weekday</th>
+                                <th>Lesson number</th>
+                                <th>Subject</th>
+                                <th>Lector</th>
+                                <th>Classroom</th>
                             </tr>
                             </thead>
-                            <c:forEach var="lessonDto" items="${lessonDtoList}">
+<%--                            <tr>--%>
+<%--                                <td>Monday</td>--%>
+                            <c:forEach var="lessonDto" items="${mondayListSorted}">
+                                <tr>
+                                    <td>${lessonDto.weekday}</td>
+                                    <td>${lessonDto.numberLesson}</td>
+                                    <td>${lessonDto.subjectDto}</td>
+                                    <td>${lessonDto.lectorDto}</td>
+                                    <td>${lessonDto.classroomDto}</td>
+                                </tr>
+                            </c:forEach>
+<%--                            </tr>--%>
+                            <c:forEach var="lessonDto" items="${tuesdayListSorted}">
+                                <tr>
+                                    <td>${lessonDto.weekday}</td>
+                                    <td>${lessonDto.numberLesson}</td>
+                                    <td>${lessonDto.subjectDto}</td>
+                                    <td>${lessonDto.lectorDto}</td>
+                                    <td>${lessonDto.classroomDto}</td>
+                                </tr>
+                            </c:forEach>
+                            <c:forEach var="lessonDto" items="${wednesdayListSorted}">
+                                <tr>
+                                    <td>${lessonDto.weekday}</td>
+                                    <td>${lessonDto.numberLesson}</td>
+                                    <td>${lessonDto.subjectDto}</td>
+                                    <td>${lessonDto.lectorDto}</td>
+                                    <td>${lessonDto.classroomDto}</td>
+                                </tr>
+                            </c:forEach>
+                            <c:forEach var="lessonDto" items="${thursdayListSorted}">
+                                <tr>
+                                    <td>${lessonDto.weekday}</td>
+                                    <td>${lessonDto.numberLesson}</td>
+                                    <td>${lessonDto.subjectDto}</td>
+                                    <td>${lessonDto.lectorDto}</td>
+                                    <td>${lessonDto.classroomDto}</td>
+                                </tr>
+                            </c:forEach>
+                            <c:forEach var="lessonDto" items="${fridayListSorted}">
                                 <tr>
                                     <td>${lessonDto.weekday}</td>
                                     <td>${lessonDto.numberLesson}</td>

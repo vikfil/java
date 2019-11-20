@@ -7,17 +7,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubjectRepository {
+public class SubjectRepository implements SubjectDao{
     private final static String INSERT_SUBJECT = "INSERT INTO schedule.subject(subject_name) VALUES(?)";
     private final static String SELECT_ALL = "SELECT * FROM schedule.subject";
     private final static String DELETE = "DELETE FROM schedule.subject WHERE subject_id = ?";
     private final static String UPDATE = "UPDATE schedule.subject SET subject_name = ? WHERE subject_id  = ?";
     private final static String SUBJECT_ID = "SELECT * FROM schedule.subject WHERE subject_id = ?";
-    private final static String DROP_TABLE = "DROP TABLE schedule.subject";
     private static Logger logger = Logger.getLogger(SubjectRepository.class.getName());
 
 
-    public  static long addSubject(Subject subject) throws SQLException, ClassNotFoundException {
+    public long addSubject(Subject subject) throws SQLException, ClassNotFoundException {
        logger.info("Inside method addSubject");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(INSERT_SUBJECT, Statement.RETURN_GENERATED_KEYS)){
@@ -29,7 +28,7 @@ public class SubjectRepository {
             }
         }
 
-    public static List<Subject> allSubjects() {
+    public List<Subject> allSubjects() {
         List<Subject> list = new ArrayList<>();
         try (Connection connection = JDBCSingleton.getInstance().getConnection();
              PreparedStatement prep = connection.prepareStatement(SELECT_ALL)) {
@@ -46,7 +45,7 @@ public class SubjectRepository {
         return list;
     }
 
-    public static Subject subjectById(long id) throws SQLException, ClassNotFoundException {
+    public Subject subjectById(long id) throws SQLException, ClassNotFoundException {
         logger.info("Inside method subjectById");
         try (Connection connection = JDBCSingleton.getInstance().getConnection();
              PreparedStatement prep = connection.prepareStatement(SUBJECT_ID)) {
@@ -62,7 +61,7 @@ public class SubjectRepository {
         throw new SQLException("Subject id doesn't exist");
     }
 
-    public static boolean updateSubject (Subject subject) throws SQLException, ClassNotFoundException {
+    public boolean updateSubject (Subject subject) throws SQLException, ClassNotFoundException {
         logger.info("Inside method updateSubject");
         try (Connection connection = JDBCSingleton.getInstance().getConnection();
              PreparedStatement prep = connection.prepareStatement(UPDATE)) {
@@ -73,7 +72,7 @@ public class SubjectRepository {
         }
     }
 
-    public static boolean deleteSubjectById (long id) throws SQLException, ClassNotFoundException {
+    public boolean deleteSubjectById (long id) throws SQLException, ClassNotFoundException {
         logger.info("Inside method deleteSubjectById");
         try (Connection connection = JDBCSingleton.getInstance().getConnection();
              PreparedStatement prep = connection.prepareStatement(DELETE)) {

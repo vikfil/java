@@ -1,26 +1,38 @@
 package controller;
 
-import model.Classroom;
+
 import modelDto.ClassroomDto;
 import org.apache.log4j.Logger;
 import repository.ClassroomRepository;
-import serviceDto.ClassroomServiceDto;
-
+import service.ClassroomService;
+//import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet(name = "ClassroomServlet", urlPatterns = "/classroom")
 public class ClassroomServlet extends HttpServlet {
-   private static Logger logger = Logger.getLogger(ClassroomServlet.class.getName());
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//    @Inject
+//    private ClassroomDto classroomDto;
+//    @Inject
+//    private Validator validator;
+
+   private static Logger logger = Logger.getLogger(ClassroomServlet.class.getName());
+   private ClassroomService classroomService = new ClassroomService(new ClassroomRepository());
+
+   protected void doPost(HttpServletRequest request, HttpServletResponse response)
                           throws ServletException, IOException {
         logger.info("Inside method doPost");
         String action = request.getParameter("actionClassroom");
@@ -53,7 +65,7 @@ public class ClassroomServlet extends HttpServlet {
                         break;
                 }
             }else {
-                List<ClassroomDto> result = ClassroomServiceDto.getClassroomsDto();
+                List<ClassroomDto> result = classroomService.getClassroomsDto();
                 forwardListClassrooms(request, response, result);
             }
         }
@@ -63,7 +75,7 @@ public class ClassroomServlet extends HttpServlet {
         logger.info("Inside method searchClassroomById");
         try {
             long idClassroom = Long.valueOf(request.getParameter("idClassroom"));
-            ClassroomDto classroomDto = ClassroomServiceDto.classroomDtoById(idClassroom);
+            ClassroomDto classroomDto = classroomService.classroomDtoById(idClassroom);
             request.setAttribute("classroomDto", classroomDto);
             request.setAttribute("actionClassroom", "edit");
             String nextJSP = "/classroom.jsp";
@@ -88,24 +100,35 @@ public class ClassroomServlet extends HttpServlet {
     private void addClassroomAction(HttpServletRequest request, HttpServletResponse response)
                                     throws ServletException, IOException {
         logger.info("Inside method addClassroomAction");
-        try {
-            String classroomNumber = request.getParameter("classroomNumber");
-            String typeRoom = request.getParameter("typeRoom");
-            ClassroomDto classroomDto = new ClassroomDto();
-            classroomDto.setClassroomNumber(classroomNumber);
-            classroomDto.setTypeRoom(typeRoom);
-            long idClassroom = ClassroomServiceDto.addClassroomDto(classroomDto);
-            List<ClassroomDto> classroomDtoList = ClassroomServiceDto.getClassroomsDto();
-            request.setAttribute("idClassroomDto", idClassroom);
-            String message = "The new classroom has been successfully created";
-            request.setAttribute("message", message);
-            forwardListClassrooms(request, response, classroomDtoList);
-        }catch (Exception e) {
-            request.setAttribute("Error", "Classroom doesn't created");
-            getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
-            logger.error("Classroom doesn't created", e);
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        String classroomNumber = request.getParameter("classroomNumber");
+        String typeRoom = request.getParameter("typeRoom");
+        ClassroomDto classroomDto = new ClassroomDto(classroomNumber, typeRoom);
+        Set<ConstraintViolation<ClassroomDto>> violations = validator.validate(classroomDto);
+        if (violations.size() > 0) {
+            for (ConstraintViolation<ClassroomDto> violation : violations) {
+
+                String message = violation.getMessage();
+                request.setAttribute("message", message);
+                getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
+            }
+        }else {
+            try {
+                long idClassroom = classroomService.addClassroomDto(classroomDto);
+                List<ClassroomDto> classroomDtoList = classroomService.getClassroomsDto();
+                request.setAttribute("idClassroomDto", idClassroom);
+                String message = "The new classroom has been successfully created";
+                request.setAttribute("message", message);
+                forwardListClassrooms(request, response, classroomDtoList);
+            } catch (Exception e) {
+                String message = "The classroom doesn't created";
+                request.setAttribute("message", message);
+                getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
+                logger.error("Classroom doesn't created", e);
             }
         }
+   }
 
     private void editClassroomAction(HttpServletRequest request, HttpServletResponse response)
                                      throws ServletException, IOException {
@@ -118,10 +141,10 @@ public class ClassroomServlet extends HttpServlet {
             classroomDto.setClassroomNumber(classroomNumber);
             classroomDto.setTypeRoom(typeRoom);
             classroomDto.setId(idClassroom);
-            boolean success = ClassroomServiceDto.updateClassroomDto(classroomDto);
+            boolean success = classroomService.updateClassroomDto(classroomDto);
             if (success) {
                 String message = "The classroom has been successfully updated.";
-                List<ClassroomDto> classroomDtoList = ClassroomServiceDto.getClassroomsDto();
+                List<ClassroomDto> classroomDtoList = classroomService.getClassroomsDto();
                 request.setAttribute("idClassroom", idClassroom);
                 request.setAttribute("message", message);
                 forwardListClassrooms(request, response, classroomDtoList);
@@ -138,11 +161,11 @@ public class ClassroomServlet extends HttpServlet {
         logger.info("Inside method removeClassroomById");
         try {
             long idClassroom = Long.valueOf(req.getParameter("idClassroom"));
-            boolean confirm = ClassroomServiceDto.deleteClassroomDtoById(idClassroom);
+            boolean confirm = classroomService.deleteClassroomDtoById(idClassroom);
                 if (confirm) {
                     String message = "The classroom has been successfully removed.";
                     req.setAttribute("message", message);
-                    List<ClassroomDto> classroomDtoList = ClassroomServiceDto.getClassroomsDto();
+                    List<ClassroomDto> classroomDtoList = classroomService.getClassroomsDto();
                     forwardListClassrooms(req, resp, classroomDtoList);
                 }
         }catch (Exception e) {

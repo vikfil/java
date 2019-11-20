@@ -2,7 +2,6 @@ package mapper;
 
 import model.Lector;
 import modelDto.LectorDto;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

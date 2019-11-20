@@ -2,15 +2,12 @@ package repository;
 
 import datasource.JDBCSingleton;
 import model.Lector;
-import model.Lesson;
-import model.Subject;
 import org.apache.log4j.Logger;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LectorRepository {
+public class LectorRepository implements LectorDao {
     private final static String INSERT_LECTOR = "INSERT INTO schedule.lector(first_name, last_name) VALUES(?,?)";
     private final static String SELECT_ALL = "SELECT * FROM schedule.lector";
     private final static String DELETE = "DELETE FROM schedule.lector WHERE lector_id = ?";
@@ -19,8 +16,8 @@ public class LectorRepository {
     private final static String DROP_TABLE = "DROP TABLE schedule.lector";
     private static Logger logger = Logger.getLogger(LectorRepository.class.getName());
 
-
-    public static long addLector(Lector lector) throws SQLException, ClassNotFoundException {
+    @Override
+    public long addLector(Lector lector) throws SQLException, ClassNotFoundException {
         logger.info("Inside method addLector");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(INSERT_LECTOR, Statement.RETURN_GENERATED_KEYS)) {
@@ -33,7 +30,8 @@ public class LectorRepository {
         }
     }
 
-    public static List<Lector> allLectors() {
+    @Override
+    public List<Lector> allLectors() {
         logger.info("Inside method allLectors");
         List<Lector> list = new ArrayList<>();
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
@@ -52,7 +50,8 @@ public class LectorRepository {
         return list;
     }
 
-    public static Lector lectorById(long id) throws SQLException, ClassNotFoundException {
+    @Override
+    public Lector lectorById(long id) throws SQLException, ClassNotFoundException {
         logger.info("Inside method lectorById");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(LECTOR_ID)) {
@@ -69,7 +68,8 @@ public class LectorRepository {
         throw new SQLException("Lector id doesn't exist");
     }
 
-    public static boolean updateLector(Lector lector) throws SQLException, ClassNotFoundException {
+    @Override
+    public boolean updateLector(Lector lector) throws SQLException, ClassNotFoundException {
         logger.info("Inside method updateLector");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(UPDATE)) {
@@ -81,7 +81,8 @@ public class LectorRepository {
         }
     }
 
-    public static boolean deleteLectorById(long id) throws SQLException, ClassNotFoundException {
+    @Override
+    public boolean deleteLectorById(long id) throws SQLException, ClassNotFoundException {
         logger.info("Inside method deleteLectorById");
         try(Connection connection = JDBCSingleton.getInstance().getConnection();
             PreparedStatement prep = connection.prepareStatement(DELETE)) {

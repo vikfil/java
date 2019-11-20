@@ -2,11 +2,11 @@ package controller;
 
 import modelDto.GroupDto;
 import modelDto.LectorDto;
-import modelDto.LessonDto;
-import serviceDto.GroupServiceDto;
-import serviceDto.LectorServiceDto;
-import serviceDto.LessonServiceDto;
-
+import org.apache.log4j.Logger;
+import repository.GroupRepository;
+import repository.LectorRepository;
+import service.GroupService;
+import service.LectorService;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,20 +16,29 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ScheduleServlet", urlPatterns = "/schedule")
+@WebServlet(name = "ScheduleServlet", urlPatterns = {"/schedule", "/",})
 public class ScheduleServlet extends HttpServlet {
+    private static Logger logger = Logger.getLogger(ScheduleServlet.class.getName());
+    private GroupService groupService = new GroupService(new GroupRepository());
+    private LectorService lectorService = new LectorService(new LectorRepository());
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<GroupDto> groupDtoList = GroupServiceDto.getGroupsDto();
-        List<LectorDto> lectorDtoList = LectorServiceDto.getLectorsDto();
+       logger.info("Inside method doGet");
+        try {
+           List<GroupDto> groupDtoList = groupService.getGroupsDto();
+           List<LectorDto> lectorDtoList = lectorService.getLectorsDto();
 
-        request.setAttribute("groupDtoList", groupDtoList);
-        request.setAttribute("lectorDtoList", lectorDtoList);
+           request.setAttribute("groupDtoList", groupDtoList);
+           request.setAttribute("lectorDtoList", lectorDtoList);
 
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/schedule.jsp");
-        dispatcher.forward(request, response);
+           RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/schedule.jsp");
+           dispatcher.forward(request, response);
+       }catch (Exception e) {
+           logger.error("Group or lector list not found", e);
+       }
     }
 }

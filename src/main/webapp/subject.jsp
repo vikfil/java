@@ -5,25 +5,25 @@
     <title>Add subject</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="<c:url value='/css/bootstrap.min.css'/>">
+    <link rel="stylesheet" href="<c:url value='/css/main.css'/>">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
-    <form action="subject" method="post"  role="form" data-toggle="validator" >
+    <form action="subject" method="post" class="form"  role="form" data-toggle="validator" >
         <c:if test ="${empty action}">
             <c:set var="action" value="add"/>
         </c:if>
         <input type="hidden" id="action" name="action" value="${action}">
         <input type="hidden" id="idSubject" name="idSubject" value="${subjectDto.id}">
-        <h2>Subject</h2>
+        <h2 class="h2">Subject</h2>
         <div class="form-group col-xs-4">
             <label for="name" class="control-label col-xs-4">Name:</label>
             <input type="text" name="name" id="name" class="form-control" value="${subjectDto.subjectName}" required="true"/>
             <br></br>
-            <button type="submit" class="btn btn-primary  btn-md">Accept</button>
+            <button type="submit" class="btn btn-success  btn-md">Create</button>
         </div>
     </form>
 </div>

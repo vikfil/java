@@ -1,0 +1,126 @@
+.card-body {
+  height: 150px;
+  background: #F8E391;
+  text-align: center;
+}
+.h2 {
+  margin-left: 500px;
+}
+.control-label {
+  background: #BCEBDD;
+  color: #3D3511;
+  text-shadow: 0 1px 1px #2D2020;
+}
+.home {
+  position: absolute;
+  top: 5px;
+  right: 50px;
+  background-color: #1575E9;
+  border: none;
+  color: white;
+  margin-left: 1000px;
+  background-color: #1575E9;
+  border: none;
+  color: white;
+}
+/*.error-home {*/
+/*  width: 30px;*/
+/*  height: 20px;*/
+/*}*/
+.col h2 {
+  text-align: center;
+}
+.btn-remove {
+  margin-left: 100px;
+}
+header {
+  height: 250px;
+  width: 100%;
+  text-align: center;
+  padding-top: 10px;
+  background: #E4E5D2;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+header h1, h2 {
+  font-family: 'Open Sans', sans-serif;
+  position: relative;
+  color: #5C2610;
+  font-size: 3em;
+  font-weight: bold;
+  line-height: 1;
+  padding: 10px 0;
+  margin: 20px;
+  text-align: center;
+  display: inline-block;
+}
+h1:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 80%;
+  height: 200%;
+  border-radius: 50%/30%;
+  border: 6px solid #5C2610;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+table {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  font-size: 14px;
+  border-radius: 10px;
+  border-color: white;
+  border-spacing: 0;
+  text-align: center;
+  width: 370px;
+}
+th {
+  background: #BCEBDD;
+  color: #3D3511;
+  text-shadow: 0 1px 1px #2D2020;
+  padding: 10px 20px;
+}
+/*th, td {*/
+/*  border-style: solid;*/
+/*  border-width: 1px;*/
+/*  border-color: white;*/
+/*  text-align: center;*/
+/*}*/
+td {
+  padding: 10px 20px;
+  background: #F8E391;
+  border-width: 1px;
+  border-color: white;
+  border-style: solid;
+}
+
+button {
+  text-decoration: none;
+  outline: none;
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #fe6637;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  color: #fe6637;
+  transition: .2s ease-in-out;
+}
+.form {
+    background: #BCEBDD;
+    color: #3D3511;
+    text-shadow: 0 1px 1px #2D2020;
+    padding: 10px 20px;
+}
+
+footer {
+  background-image: linear-gradient(#34e89e, #0f3443);
+  height: 100px;
+  text-align: center;
+  color: white;
+}
+
+/*!*# sourceMappingURL=main.css.map *!*/

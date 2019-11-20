@@ -1,9 +1,8 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import java.util.Objects;
 
-@JsonAutoDetect
+
 public class Lesson {
     private long id;
     private Week weekday;

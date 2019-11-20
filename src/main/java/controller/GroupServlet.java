@@ -1,10 +1,10 @@
 package controller;
 
-import model.Group;
+import modelDto.ClassroomDto;
 import modelDto.GroupDto;
 import org.apache.log4j.Logger;
 import repository.GroupRepository;
-import serviceDto.GroupServiceDto;
+import service.GroupService;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,14 +12,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet(name = "SaveGroupServlet", value = "/group")
 public class GroupServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(GroupServlet.class.getName());
+    private GroupService groupService = new GroupService(new GroupRepository());
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
                           throws ServletException, IOException {
@@ -53,7 +58,7 @@ public class GroupServlet extends HttpServlet {
                     break;
             }
         }else {
-            List<GroupDto> result = GroupServiceDto.getGroupsDto();
+            List<GroupDto> result = groupService.getGroupsDto();
             forwardListGroups(request, response, result);
         }
     }
@@ -63,7 +68,7 @@ public class GroupServlet extends HttpServlet {
         logger.info("Inside method searchGroupById");
         try {
             long idGroup = Long.valueOf(request.getParameter("idGroup"));
-            GroupDto groupDto = GroupServiceDto.groupDtoById(idGroup);
+            GroupDto groupDto = groupService.groupDtoById(idGroup);
             request.setAttribute("groupDto", groupDto);
             request.setAttribute("actionGroup", "edit");
             String nextJSP = "/group.jsp";
@@ -88,23 +93,37 @@ public class GroupServlet extends HttpServlet {
     private void addGroupAction(HttpServletRequest request, HttpServletResponse response)
                                 throws ServletException, IOException {
         logger.info("Inside method addGroupAction");
-        try {
+
+            ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+            Validator validator = factory.getValidator();
             String groupNumber = request.getParameter("groupNumber");
             String groupName = request.getParameter("groupName");
-            GroupDto groupDto = new GroupDto();
-            groupDto.setGroupNumber(groupNumber);
-            groupDto.setGroupName(groupName);
-            long idGroup = GroupServiceDto.addGroupDto(groupDto);
-            List<GroupDto> groupDtoList = GroupServiceDto.getGroupsDto();
-            request.setAttribute("idGroup", idGroup);
-            String message = "The new group has been successfully created";
-            request.setAttribute("message", message);
-            forwardListGroups(request, response, groupDtoList);
-        }catch (Exception e) {
-            request.setAttribute("Error", "Group doesn't created");
-            getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
-            logger.error("Group doesn't created", e);
-        }
+            GroupDto groupDto = new GroupDto(groupNumber, groupName);
+//            groupDto.setGroupNumber(groupNumber);
+//            groupDto.setGroupName(groupName);
+            Set<ConstraintViolation<GroupDto>> violations = validator.validate(groupDto);
+            if (violations.size() > 0) {
+                for (ConstraintViolation<GroupDto> violation : violations) {
+                    String message = violation.getMessage();
+                    request.setAttribute("message", message);
+                    getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
+                }
+            }else {
+                try {
+                    long idGroup = groupService.addGroupDto(groupDto);
+                    List<GroupDto> groupDtoList = groupService.getGroupsDto();
+                    request.setAttribute("idGroup", idGroup);
+                    String message = "The new group has been successfully created";
+                    request.setAttribute("message", message);
+                    forwardListGroups(request, response, groupDtoList);
+                } catch (Exception e) {
+                    String message = "The Group doesn't created";
+                    request.setAttribute("message", message);
+                    //request.setAttribute("Error", "Group doesn't created");
+                    getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
+                    logger.error("Group doesn't created", e);
+                }
+            }
     }
 
     private void editGroupAction(HttpServletRequest request, HttpServletResponse response)
@@ -118,10 +137,10 @@ public class GroupServlet extends HttpServlet {
             groupDto.setGroupNumber(groupNumber);
             groupDto.setGroupName(groupName);
             groupDto.setId(idGroup);
-            boolean success = GroupServiceDto.updateGroupDto(groupDto);
+            boolean success = groupService.updateGroupDto(groupDto);
             if (success) {
                 String message = "The group has been successfully updated.";
-                List<GroupDto> groupDtoList = GroupServiceDto.getGroupsDto();
+                List<GroupDto> groupDtoList = groupService.getGroupsDto();
                 request.setAttribute("idGroup", idGroup);
                 request.setAttribute("message", message);
                 forwardListGroups(request, response, groupDtoList);
@@ -138,11 +157,11 @@ public class GroupServlet extends HttpServlet {
         logger.info("Inside method removeGroupAction");
         try {
             long idGroup = Long.valueOf(req.getParameter("idGroup"));
-            boolean confirm = GroupServiceDto.deleteGroupDtoById(idGroup);
+            boolean confirm = groupService.deleteGroupDtoById(idGroup);
             if (confirm) {
                 String message = "The group has been successfully removed.";
                 req.setAttribute("message", message);
-                List<GroupDto> groupDtoList = GroupServiceDto.getGroupsDto();
+                List<GroupDto> groupDtoList = groupService.getGroupsDto();
                 forwardListGroups(req, resp, groupDtoList);
             }
         }catch (Exception e) {

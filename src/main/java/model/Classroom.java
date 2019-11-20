@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class Classroom {
     private String classroomNumber;
@@ -79,14 +78,4 @@ public class Classroom {
                 ", id=" + id +
                 '}';
     }
-
-//    private boolean limitationClassFields(String str) {
-//        if(str == null || str.isEmpty()) {
-//            return false;
-//        }
-//        if(str.length() > 15) {
-//            return false;
-//        }
-//        return Pattern.matches("\\w", str);
-//    }
 }

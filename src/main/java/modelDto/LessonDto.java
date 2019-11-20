@@ -12,6 +12,16 @@ public class LessonDto {
     private ClassroomDto classroomDto;
 
 
+    public LessonDto(Week weekday, int numberLesson, SubjectDto subjectDto, GroupDto groupDto, LectorDto lectorDto, ClassroomDto classroomDto) {
+        this.weekday = weekday;
+        this.numberLesson = numberLesson;
+        this.subjectDto = subjectDto;
+        this.groupDto = groupDto;
+        this.lectorDto = lectorDto;
+        this.classroomDto = classroomDto;
+    }
+    public LessonDto() {}
+
     public long getId() {
         return id;
     }

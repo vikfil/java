@@ -13,11 +13,6 @@
 <body>
 <div class="container">
     <form action="addLesson" method="post"  role="form" class="form" data-toggle="validator" >
-<%--        <c:if test ="${empty action}">--%>
-<%--            <c:set var="actionLesson" value="add"/>--%>
-<%--        </c:if>--%>
-<%--        <input type="hidden" id="actionLesson" name="actionLesson" value="${actionLesson}">--%>
-<%--        <input type="hidden" id="idLesson" name="idLesson" value="${lesson.id}">--%>
         <h2 class="h2">Lesson</h2>
         <div class="form-group col-xs-4">
             <label for="weekday" class="control-label col-xs-4">Weekday:</label>
@@ -69,10 +64,6 @@
         </div>
     </form>
 </div>
-
-
-
-
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

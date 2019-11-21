@@ -150,7 +150,8 @@ public class ClassroomServlet extends HttpServlet {
                 forwardListClassrooms(request, response, classroomDtoList);
             }
         }catch(Exception e) {
-            request.setAttribute("Error", "Classroom doesn't updated");
+            String message = "Classroom doesn't updated";
+            request.setAttribute("message", message );
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
             logger.error("Classroom doesn't updated", e);
         }
@@ -169,7 +170,8 @@ public class ClassroomServlet extends HttpServlet {
                     forwardListClassrooms(req, resp, classroomDtoList);
                 }
         }catch (Exception e) {
-            req.setAttribute("Error", "Classroom doesn't removed");
+            String message = "Classroom doesn't removed";
+            req.setAttribute("message", message);
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(req, resp);
             logger.error("Classroom doesn't removed", e);
             }

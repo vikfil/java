@@ -99,8 +99,6 @@ public class GroupServlet extends HttpServlet {
             String groupNumber = request.getParameter("groupNumber");
             String groupName = request.getParameter("groupName");
             GroupDto groupDto = new GroupDto(groupNumber, groupName);
-//            groupDto.setGroupNumber(groupNumber);
-//            groupDto.setGroupName(groupName);
             Set<ConstraintViolation<GroupDto>> violations = validator.validate(groupDto);
             if (violations.size() > 0) {
                 for (ConstraintViolation<GroupDto> violation : violations) {
@@ -119,7 +117,6 @@ public class GroupServlet extends HttpServlet {
                 } catch (Exception e) {
                     String message = "The Group doesn't created";
                     request.setAttribute("message", message);
-                    //request.setAttribute("Error", "Group doesn't created");
                     getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
                     logger.error("Group doesn't created", e);
                 }
@@ -133,9 +130,9 @@ public class GroupServlet extends HttpServlet {
             String groupNumber = request.getParameter("groupNumber");
             String groupName = request.getParameter("groupName");
             long idGroup = Long.valueOf(request.getParameter("idGroup"));
-            GroupDto groupDto = new GroupDto();
-            groupDto.setGroupNumber(groupNumber);
-            groupDto.setGroupName(groupName);
+            GroupDto groupDto = new GroupDto(groupNumber, groupName);
+//            groupDto.setGroupNumber(groupNumber);
+//            groupDto.setGroupName(groupName);
             groupDto.setId(idGroup);
             boolean success = groupService.updateGroupDto(groupDto);
             if (success) {
@@ -146,7 +143,8 @@ public class GroupServlet extends HttpServlet {
                 forwardListGroups(request, response, groupDtoList);
             }
         }catch(Exception e) {
-            request.setAttribute("Error", "Group doesn't updated");
+            String message = "Group doesn't updated";
+            request.setAttribute("message", message);
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
             logger.error("Group doesn't updated", e);
         }
@@ -165,7 +163,8 @@ public class GroupServlet extends HttpServlet {
                 forwardListGroups(req, resp, groupDtoList);
             }
         }catch (Exception e) {
-            req.setAttribute("Error", "Group doesn't removed");
+            String message = "Group doesn't removed";
+            req.setAttribute("message", message );
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(req, resp);
             logger.error("Group doesn't removed", e);
         }

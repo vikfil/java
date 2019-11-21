@@ -29,11 +29,11 @@ public class ScheduleGroupServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(ScheduleGroupServlet.class.getName());
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      try {
+        logger.info("Inside method doPost");
+        try {
           long groupId = Long.valueOf(request.getParameter("groupId"));
           GroupDto groupDto = groupService.groupDtoById(groupId);
           List<LessonDto> lessonDtoList = lessonService.lessonsForGroup(groupDto);
-
           List<LessonDto> mondayList = lessonDtoList.stream().filter(e ->e.getWeekday().equals(Week.MONDAY)).collect(Collectors.toList());
           List<LessonDto> mondayListSorted = mondayList.stream().sorted(Comparator.comparingInt(LessonDto::getNumberLesson)).collect(Collectors.toList());
           request.setAttribute("mondayListSorted", mondayListSorted);
@@ -49,18 +49,15 @@ public class ScheduleGroupServlet extends HttpServlet {
           List<LessonDto> fridayList = lessonDtoList.stream().filter(e ->e.getWeekday().equals(Week.FRIDAY)).collect(Collectors.toList());
           List<LessonDto> fridayListSorted = fridayList.stream().sorted(Comparator.comparingInt(LessonDto::getNumberLesson)).collect(Collectors.toList());
           request.setAttribute("fridayListSorted", fridayListSorted);
-
-
-
-          //request.setAttribute("lessonDtoList", lessonDtoList);
           request.setAttribute("groupDto", groupDto);
           RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/schedule_group.jsp");
           dispatcher.forward(request, response);
-
-      }catch (Exception e) {
-
+        }catch (Exception e) {
+            String message = "Not found lessson for group";
+            request.setAttribute("message", message);
+            getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
+            logger.error("Not found lessson for group", e);
       }
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

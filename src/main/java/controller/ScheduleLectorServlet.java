@@ -53,6 +53,9 @@ public class ScheduleLectorServlet extends HttpServlet {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/schedule_lector.jsp");
             dispatcher.forward(request, response);
         }catch (Exception e) {
+            String message = "Not found lessson for lector";
+            request.setAttribute("message", message);
+            getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
             logger.error("Not found lessson for lector", e);
         }
     }

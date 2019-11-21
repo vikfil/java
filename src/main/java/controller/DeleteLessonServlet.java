@@ -36,7 +36,8 @@ public class DeleteLessonServlet extends HttpServlet {
                     dispatcher.forward(request, response);
                 }
             }catch (Exception e){
-                request.setAttribute("Error", "Lesson doesn't removed");
+                String message = "Lesson doesn't removed";
+                request.setAttribute("message", message);
                 getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
                 logger.error("The lesson doesn't removed", e);
             }

@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ScheduleServlet", urlPatterns = {"/schedule", "/",})
+@WebServlet(name = "ScheduleServlet", urlPatterns = {"/", "/schedule"})
 public class ScheduleServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(ScheduleServlet.class.getName());
     private GroupService groupService = new GroupService(new GroupRepository());
@@ -38,6 +38,9 @@ public class ScheduleServlet extends HttpServlet {
            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/schedule.jsp");
            dispatcher.forward(request, response);
        }catch (Exception e) {
+            String message = "Group or lector list not found";
+            request.setAttribute("message", message);
+            getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
            logger.error("Group or lector list not found", e);
        }
     }

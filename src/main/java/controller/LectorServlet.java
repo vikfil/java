@@ -107,8 +107,6 @@ public class LectorServlet extends HttpServlet {
                     getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
                 }
             }else {
-//            lectorDto.setFirstName(firstName);
-//            lectorDto.setLastName(lastName);
                 try {
                     long idLector = lectorService.addLectorDto(lectorDto);
                     List<LectorDto> lectorDtoList = lectorService.getLectorsDto();
@@ -131,9 +129,7 @@ public class LectorServlet extends HttpServlet {
             String firstName = request.getParameter("firstName");
             String lastName = request.getParameter("lastName");
             long idLector = Long.valueOf(request.getParameter("idLector"));
-            LectorDto lectorDto = new LectorDto();
-            lectorDto.setFirstName(firstName);
-            lectorDto.setLastName(lastName);
+            LectorDto lectorDto = new LectorDto(firstName, lastName);
             lectorDto.setId(idLector);
             boolean success = lectorService.updateLectorDto(lectorDto);
             if (success) {
@@ -144,7 +140,8 @@ public class LectorServlet extends HttpServlet {
                 forwardListLectors(request, response, lectorDtoList);
             }
         }catch (Exception e) {
-            request.setAttribute("Error", "Lector doesn't updated");
+            String message = "Lector doesn't updated";
+            request.setAttribute("message", message );
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
             logger.error("The lector hasn't been updated", e);
         }
@@ -163,7 +160,8 @@ public class LectorServlet extends HttpServlet {
                 forwardListLectors(req, resp, lectorDtoList);
             }
         }catch (Exception e){
-            req.setAttribute("Error", "Lector doesn't removed");
+            String message = "Lector doesn't removed";
+            req.setAttribute("message", message);
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(req, resp);
             logger.error("The lector doesn't removed", e);
         }

@@ -57,7 +57,8 @@ public class AddLessonServlet extends HttpServlet {
                 forwardListLessons(request, response, lessonDtoList);
             }
         }catch (Exception e) {
-            request.setAttribute("Error", "Lesson doesn't created");
+            String message ="The lesson doesn't created, occured SQLException.";
+            request.setAttribute("message", message);
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
             logger.error("Lesson doesn't created", e);
         }

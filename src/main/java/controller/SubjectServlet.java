@@ -132,14 +132,15 @@ public class SubjectServlet extends HttpServlet {
             subjectDto.setSubjectName(name);
             boolean success = subjectService.updateSubjectDto(subjectDto);
             if (success) {
-                String message ="The subject has been successfully updated.";
+                String message ="The subject has been successfully updated";
                 List<SubjectDto> subjectDtoList = subjectService.getSubjectsDto();
                 request.setAttribute("idSubject", idSubject);
                 request.setAttribute("message", message);
                 forwardListSubjects(request, response, subjectDtoList);
             }
         }catch (Exception e) {
-            request.setAttribute("Error", "Subject doesn't updated");
+            String message ="Subject doesn't updated";
+            request.setAttribute("message", message);
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(request, response);
             logger.error("The subject hasn't been updated", e);
         }
@@ -158,7 +159,8 @@ public class SubjectServlet extends HttpServlet {
                 forwardListSubjects(req, resp, subjectDtoList);
             }
         }catch (Exception e){
-            req.setAttribute("Error", "Subject doesn't removed");
+            String message ="Subject doesn't removed";
+            req.setAttribute("message", message);
             getServletContext().getRequestDispatcher("/error_page.jsp").forward(req, resp);
             logger.error("The subject doesn't removed", e);
         }

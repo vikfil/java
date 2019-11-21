@@ -13,7 +13,7 @@ public class ClassroomDto {
     @NotNull
     private String classroomNumber;
 
-//TODO
+
 //    @Valid
 //    @Pattern(message = "Bad formed classroom type", regexp = "[0-9a-zA-Z\\.\\-]{1,15}")
 //    @Size(max = 15)
